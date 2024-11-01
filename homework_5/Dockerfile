@@ -7,10 +7,8 @@ COPY Pipfile Pipfile.lock ./
 RUN pip install pipenv
 RUN pipenv install --deploy --ignore-pipfile
 
-COPY app.py ./
-COPY model1.bin ./
-COPY dv.bin ./
+COPY ["model1.bin ./", " dv.bin ./","app.py ./"]
 
 EXPOSE 9696
 
-CMD ["pipenv", "run", "gunicorn", "--bind", "0.0.0.0:9696", "app:app"]
+ENTRYPOINT  ["pipenv", "run", "gunicorn", "--bind", "0.0.0.0:9696", "app:app"]
