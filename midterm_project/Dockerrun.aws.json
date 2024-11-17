@@ -1,0 +1,12 @@
+{
+    "AWSEBDockerrunVersion": "1",
+    "Image": {
+        "Name": "serdar2225/passenger_prediction:v1",
+        "Update": "true"
+    },
+    "Ports": [
+        {
+            "ContainerPort": "8000"
+        }
+    ]
+}

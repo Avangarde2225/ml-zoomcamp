@@ -1,0 +1,23 @@
+POST https://passenger-prediction-app.azurewebsites.net/predict
+Content-Type: application/json
+
+{
+    "DISTANCE": 5000000.0,
+    "TOTAL_CARGO": 1000000.0,
+    "CARRIER_GROUP_NEW": 1,
+    "UNIQUE_CARRIER_encoded": 15,
+    "Org_Dest_Country_FE": 0.75,
+    "MONTH_SIN": 0.5,
+    "MONTH_COS": 0.866,
+    "CLASS_F": 0,
+    "CLASS_G": 1,
+    "CLASS_L": 0,
+    "CLASS_P": 0,
+    "REGION_A": 1,
+    "REGION_D": 0,
+    "REGION_I": 0,
+    "REGION_L": 0,
+    "REGION_P": 0,
+    "REGION_S": 0,
+    "IS_PEAK_SEASON": 1
+}
