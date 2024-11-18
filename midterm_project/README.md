@@ -52,7 +52,7 @@ EDA was conducted using Python notebooks to analyze trends, correlations, and di
 
 ![Correlation Heatmap](pics/feature_heat_map.png)
 
-EDA notebook: `midterm_project/EDA/EDA_AIR_passenger_freight_data_2015_2024.ipynb`(midterm_project/EDA/EDA_AIR_passenger_freight_data_2015_2024.ipynb)
+EDA notebook: ![`midterm_project/EDA/EDA_AIR_passenger_freight_data_2015_2024.ipynb`](midterm_project/EDA/EDA_AIR_passenger_freight_data_2015_2024.ipynb)
 
 ---
 
@@ -117,7 +117,7 @@ A predictive model was developed using a Random Forest Regressor, optimized for:
 | RMSE          | 10.2   |
 | R² Score      | 0.89   |
 
-Model notebook: `midterm_project/MODEL/Model_Generation.ipynb`(midterm_project/MODEL/Model_Generation.ipynb)
+Model notebook: ![`midterm_project/MODEL/Model_Generation.ipynb`](midterm_project/MODEL/Model_Generation.ipynb)
 
 ---
 
