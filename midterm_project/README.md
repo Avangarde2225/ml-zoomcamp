@@ -43,7 +43,7 @@ EDA was conducted using Python notebooks to analyze trends, correlations, and di
 
 **Correlation Heatmap:**
 
-![Correlation Heatmap](path_to_your_correlation_heatmap_image.png)
+![Correlation Heatmap](pics/feature_heat_map.png)
 
 EDA notebook: `midterm_project/EDA/EDA_AIR_passenger_freight_data_2015_2024.ipynb`.
 
@@ -172,8 +172,8 @@ The model was containerized and deployed as an Azure Web App using Docker.
 
 ### Azure Deployment
 
-### Ensure Docker and Azure CLI are installed, then deploy with:
+**Ensure Docker and Azure CLI are installed, then deploy with**:
 
-       ```bash
+   ```bash
     az webapp up --name passenger-prediction-app --resource-group <resource_group>
-      ```
+   ```
