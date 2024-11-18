@@ -2,7 +2,9 @@
 
 ## Overview
 
-This project is a comprehensive pipeline to predict passenger counts for various regions and carriers. It encompasses the following stages:
+Predictive modeling has become an essential tool for deriving actionable insights and making data-driven decisions in the transportation and logistics industry. This project leverages a comprehensive dataset spanning passenger, freight, and domestic mail cargo information from 2015 to 2024, focusing on U.S. to international destinations. By combining statistical analysis and machine learning, we aim to uncover patterns in passenger traffic and cargo flow, enabling accurate forecasting for different carriers and regions. Through this endeavor, we illustrate the end-to-end pipeline—from data collection and exploration to advanced feature engineering, model building, and deployment—showcasing how data can be transformed into valuable predictions to enhance operational efficiency and strategic planning.
+
+It encompasses the following stages:
 
 1. **Data Gathering**  
 2. **Exploratory Data Analysis (EDA)**  
@@ -52,7 +54,7 @@ EDA was conducted using Python notebooks to analyze trends, correlations, and di
 
 ![Correlation Heatmap](pics/feature_heat_map.png)
 
-EDA notebook: ![`midterm_project/EDA/EDA_AIR_passenger_freight_data_2015_2024.ipynb`](../EDA/EDA_AIR_passenger_freight_data_2015_2024.ipynb)
+EDA notebook: ![`midterm_project/EDA/EDA_AIR_passenger_freight_data_2015_2024.ipynb`](EDA/EDA_AIR_passenger_freight_data_2015_2024.ipynb)
 
 ---
 
@@ -117,7 +119,7 @@ A predictive model was developed using a Random Forest Regressor, optimized for:
 | RMSE          | 10.2   |
 | R² Score      | 0.89   |
 
-Model notebook: ![`midterm_project/MODEL/Model_Generation.ipynb`](../MODEL/Model_Generation.ipynb)
+Model notebook: ![`midterm_project/MODEL/Model_Generation.ipynb`](MODEL/Model_Generation.ipynb)
 
 ---
 
