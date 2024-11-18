@@ -131,19 +131,19 @@ The model was containerized and deployed as an Azure Web App using Docker.
    ```
 
 **Folder Structure**: 
-
-midterm_project/
-├── EDA/
-│   ├── EDA_AIR_passenger_freight_data_2015_2024.ipynb
-├── MODEL/
-│   ├── Model_Generation.ipynb
-├── app.py
-├── Dockerfile
-├── requirements.txt
-├── test.http
-├── best_model.pkl
-└── freigh_merged.csv
-
+```text
+   midterm_project/
+   ├── EDA/
+   │   ├── EDA_AIR_passenger_freight_data_2015_2024.ipynb
+   ├── MODEL/
+   │   ├── Model_Generation.ipynb
+   ├── app.py
+   ├── Dockerfile
+   ├── requirements.txt
+   ├── test.http
+   ├── best_model.pkl
+   └── freigh_merged.csv
+```
 
 ### Usage
 
@@ -173,5 +173,4 @@ midterm_project/
 
     ```bash
     az webapp up --name passenger-prediction-app --resource-group <resource_group>
-
      ```
