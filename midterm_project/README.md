@@ -44,9 +44,9 @@ EDA was conducted using Python notebooks to analyze trends, correlations, and di
 
 #### Example Visualizations:
 
-**Seasonal Trends Analysis:**
+**Seasonal Trends Analysis by country:**
 
-![Seasonal Trends](path_to_your_seasonal_trends_image.png)
+![Seasonal Trends](pics/top_5_passenger_country_pairs.png)
 
 **Correlation Heatmap:**
 
