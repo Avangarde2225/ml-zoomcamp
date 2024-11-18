@@ -128,7 +128,9 @@ The model was containerized and deployed as an Azure Web App using Docker.
        "predicted_passenger_count": 120.5
    }
    
-**Folder Structure
+   ```
+
+**Folder Structure**: 
 
 midterm_project/
 ├── EDA/
@@ -147,21 +149,23 @@ midterm_project/
 
 ### Local Deployment
 
-1. **Install dependencies:
+1. **Install dependencies**:
 
    ```bash
    pip install -r requirements.txt
+    ```
 
-2.	**Run the application:
+2.	**Run the application**:
 
     ```bash
     python app.py
+     ```
 
-3.	**Test API with a tool like Postman or curl:
+3.	**Test API with a tool like Postman or curl**:
 
     ```bash
     curl -X POST -H "Content-Type: application/json" -d @test.http https://localhost:5000/predict
-
+       ```
 
 ### Azure Deployment
 
@@ -170,4 +174,4 @@ midterm_project/
     ```bash
     az webapp up --name passenger-prediction-app --resource-group <resource_group>
 
-    
+     ```
