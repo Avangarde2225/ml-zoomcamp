@@ -53,6 +53,35 @@ EDA notebook: `midterm_project/EDA/EDA_AIR_passenger_freight_data_2015_2024.ipyn
 
 Key features engineered include:
 
+```text
+Region     Description
+A             Atlantic
+D             Domestic
+I             International
+L             Latin America
+P             Pacific
+S            System 
+
+```
+```text
+Class 
+Code    Description
+A    Scheduled First Class Passenger/ Cargo Service A
+C    Scheduled Coach Passenger/ Cargo Service C
+E    Scheduled Mixed First Class And Coach, Passenger/ Cargo Service E
+F    Scheduled Passenger/ Cargo Service F
+G    Scheduled All Cargo Service G
+H    Humane Reason Unscheduled, Non-Revenue-Generating
+K    Scheduled Service K (F+G)
+L    Non-Scheduled Civilian Passenger/ Cargo Service L
+N    Non-Scheduled Military Passenger/ Cargo Service N
+P    Non-Scheduled Civilian All Cargo Service P
+Q    Non-Scheduled Services (Other Than Charter) Q
+R    Non-Scheduled Military All Cargo R
+V    Non-Scheduled Service V (L+N+P+R) For U.S. Carrier And (L+P+Q) For Foreign Carrier
+Z    All Service Z (K+V)
+```
+
 - **One-Hot Encoding**: For class and region variables.
 - **Sin/Cos Transformations**: To capture cyclic nature of months.
 - **Target Encoding**: For categorical carrier information.
