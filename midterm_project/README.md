@@ -21,7 +21,9 @@ Data was collected from various publicly available datasets, including:
 - **Freight Data**: Passenger and freight transportation statistics (2015–2024).  
 
    ![Freight_Data](pics/top_5_freight_country_pairs.png)
+
 - **Carrier and Region Information**: Supplementary datasets to encode categorical variables.
+
    ![Passenger_Data](pics/top_5_pass_O&D_pairs.png)
 
 The final merged dataset is located in [Kaggle](https://www.kaggle.com/datasets/serdar2225/us-international-freight-passenger-and-mail/data)
@@ -32,8 +34,13 @@ The final merged dataset is located in [Kaggle](https://www.kaggle.com/datasets/
 
 EDA was conducted using Python notebooks to analyze trends, correlations, and distributions. Key findings include:
 
-- Seasonal trends in passenger counts.
+- Seasonal trends in passenger counts for top 20 airlines.
+
+![pass_Data](pics/top_airlines_by_passenger.png)
+
 - Correlations between cargo volume and distance.
+
+![frei_Data](pics/top_airlines_by_cargo.png)
 
 #### Example Visualizations:
 
@@ -45,7 +52,7 @@ EDA was conducted using Python notebooks to analyze trends, correlations, and di
 
 ![Correlation Heatmap](pics/feature_heat_map.png)
 
-EDA notebook: `midterm_project/EDA/EDA_AIR_passenger_freight_data_2015_2024.ipynb`.
+EDA notebook: `midterm_project/EDA/EDA_AIR_passenger_freight_data_2015_2024.ipynb`(midterm_project/EDA/EDA_AIR_passenger_freight_data_2015_2024.ipynb)
 
 ---
 
@@ -110,7 +117,7 @@ A predictive model was developed using a Random Forest Regressor, optimized for:
 | RMSE          | 10.2   |
 | R² Score      | 0.89   |
 
-Model notebook: `midterm_project/MODEL/Model_Generation.ipynb`.
+Model notebook: `midterm_project/MODEL/Model_Generation.ipynb`(midterm_project/MODEL/Model_Generation.ipynb)
 
 ---
 
@@ -122,7 +129,7 @@ The model was containerized and deployed as an Azure Web App using Docker.
 
 1. **Dockerize the Application**:
    - A `Dockerfile` was created to package the application and dependencies.
-   - `docker-compose.yml` was used for orchestration.
+
 
 2. **Push to Azure**:
    - Azure CLI was used to deploy the container.
