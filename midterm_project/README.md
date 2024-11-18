@@ -19,9 +19,12 @@ This project is a comprehensive pipeline to predict passenger counts for various
 Data was collected from various publicly available datasets, including:
 
 - **Freight Data**: Passenger and freight transportation statistics (2015–2024).  
-- **Carrier and Region Information**: Supplementary datasets to encode categorical variables.
 
-The final merged dataset is located in `midterm_project/freigh_merged.csv`.
+   ![Freight_Data](pics/top_5_freight_country_pairs.png)
+- **Carrier and Region Information**: Supplementary datasets to encode categorical variables.
+   ![Passenger_Data](pics/top_5_pass_O&D_pairs.png)
+
+The final merged dataset is located in [Kaggle](https://www.kaggle.com/datasets/serdar2225/us-international-freight-passenger-and-mail/data)
 
 ---
 
@@ -171,6 +174,6 @@ The model was containerized and deployed as an Azure Web App using Docker.
 
 ### Ensure Docker and Azure CLI are installed, then deploy with:
 
-    ```bash
+       ```bash
     az webapp up --name passenger-prediction-app --resource-group <resource_group>
-     ```
+      ```
