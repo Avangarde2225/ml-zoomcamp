@@ -1,3 +1,0 @@
-midterm_project/freigh_merged.csv filter=lfs diff=lfs merge=lfs -text
-midterm_project/best_model.pkl filter=lfs diff=lfs merge=lfs -text
-*.pkl filter=lfs diff=lfs merge=lfs -text
