@@ -8,7 +8,6 @@ __pycache__/
 venv/
 
 # Data files
-*.csv
 *.log
 
 # IDE
