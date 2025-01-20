@@ -8,7 +8,7 @@ import pytz
 
 def load_data() -> pd.DataFrame:
     """Load the most recent data file from the directory."""
-    csv_files = [f for f in os.listdir('.') if f.startswith('reddit_business_ideas_') and f.endswith('.csv')]
+    csv_files = [f for f in os.listdir('reddit_scraper') if f.startswith('reddit_business_ideas_') and f.endswith('.csv')]
     if not csv_files:
         return pd.DataFrame()
     
