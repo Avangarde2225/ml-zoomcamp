@@ -13,7 +13,7 @@ def load_data() -> pd.DataFrame:
         return pd.DataFrame()
     
     latest_file = max(csv_files)
-    df = pd.read_csv(latest_file)
+    df = pd.read_csv(os.path.join('reddit_scraper', latest_file))
     
     # Convert string timestamps to datetime objects
     if 'created_utc' in df.columns:
@@ -44,7 +44,9 @@ def main():
     This application helps evaluate business ideas extracted from Reddit discussions.
     Use the filters below to explore and analyze different ideas.
     """)
-    
+    # st.write("Current working directory:", os.getcwd())
+    # st.write("All files in cwd:", os.listdir("."))
+    # st.write("Files in reddit_scraper folder:", os.listdir("reddit_scraper"))
     # Load data
     df = load_data()
     if df.empty:
