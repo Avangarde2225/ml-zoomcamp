@@ -1,0 +1,25 @@
+{
+    "family": "ideaevaluator",
+    "containerDefinitions": [
+        {
+            "name": "ideaevaluator",
+            "image": "your-account-id.dkr.ecr.region.amazonaws.com/ideaevaluator:latest",
+            "cpu": 256,
+            "memory": 512,
+            "portMappings": [
+                {
+                    "containerPort": 8501,
+                    "hostPort": 8501,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true
+        }
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "networkMode": "awsvpc",
+    "cpu": "256",
+    "memory": "512"
+} 
