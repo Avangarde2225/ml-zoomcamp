@@ -194,9 +194,8 @@ docker run -p 7860:7860 food-detection-app
 - Deploy using AWS App Runner
 - Monitor and scale as needed
 
-**Live Demo**:  
-The application is deployed and accessible at:  
-[https://4wtec9nstj.us-east-1.awsapprunner.com](https://4wtec9nstj.us-east-1.awsapprunner.com)
+## Live Demo
+The application is deployed and accessible at [Food Detection App](https://zm3uaffhh9.us-east-1.awsapprunner.com/). You can try it out by uploading your own food images or using the provided examples.
 
 ## Project Structure
 ```
@@ -249,7 +248,7 @@ Here are some example detections from our model:
 
 > **Note**: These example images are from actual model detections. To see them:
 > 1. Run the model on your own images using the instructions in [Inference on CPU](#inference-on-cpu)
-> 2. Or visit our [live demo](https://4wtec9nstj.us-east-1.awsapprunner.com)
+> 2. Or visit our [live demo](https://zm3uaffhh9.us-east-1.awsapprunner.com)
 > 3. Example images can be found in the `docs/images` directory after cloning the repository
 
 The model shows robust performance across different:

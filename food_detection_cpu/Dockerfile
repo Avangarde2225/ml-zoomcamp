@@ -1,5 +1,11 @@
 FROM python:3.11-slim
 
+# Set environment variables
+ENV PORT=7860
+ENV PYTHONUNBUFFERED=1
+ENV GRADIO_SERVER_NAME=0.0.0.0
+ENV GRADIO_SERVER_PORT=7860
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
@@ -7,26 +13,24 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
+# Set working directory
 WORKDIR /app
 
-# Set environment variables
-ENV PORT=7860
-ENV PYTHONUNBUFFERED=1
-ENV HOSTNAME="0.0.0.0"
-
-# Install PyTorch CPU version first
-RUN pip install --no-cache-dir torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cpu
-
-# Install other Python dependencies
-RUN pip install --no-cache-dir ultralytics==8.0.227 gradio==3.50.2 Pillow==10.2.0 opencv-python-headless==4.9.0.80
+# Copy and install requirements
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application files
 COPY app.py .
 COPY runs/detect/train9/weights/best.pt runs/detect/train9/weights/best.pt
-COPY examples examples/
+COPY docs/images docs/images
 
-# Create docs/images directory
-RUN mkdir -p docs/images
+# Create necessary directories
+RUN mkdir -p examples
+
+# Add health check
+HEALTHCHECK --interval=30s --timeout=15s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:${PORT}/ || exit 1
 
 # Command to run the application
 CMD ["python", "app.py"] 
