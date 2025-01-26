@@ -244,8 +244,8 @@ Here are some example detections from our model:
 #### Burger Detection
 ![Burger Detection](docs/images/burger_detected.png)
 
-#### Sushi Detection
-![Sushi Detection](docs/images/sushi_detected.png)
+#### Salad Detection
+![Salad Detection](docs/images/sushi_detected.png)
 
 > **Note**: These example images are from actual model detections. To see them:
 > 1. Run the model on your own images using the instructions in [Inference on CPU](#inference-on-cpu)
@@ -314,6 +314,34 @@ With minimal configuration (as of January 2024):
    - Deploy during demo/testing only
    - Pause service when not in use
    - Monitor and adjust resources based on actual usage
+
+## Deployment Challenges and Solutions
+
+### M1/M2 Mac Deployment Issue
+When deploying from an M1/M2 Mac to AWS App Runner, you might encounter health check failures due to architecture incompatibility. This occurs because:
+- M1/M2 Macs use ARM architecture
+- AWS App Runner runs on x86_64 (AMD64) architecture
+- Default Docker builds on M1/M2 Macs create ARM-based images
+
+#### Solution
+Build the Docker image specifically for AMD64 architecture using:
+```bash
+docker buildx build --platform linux/amd64 -t food-detection-app .
+docker tag food-detection-app:latest [ECR_REPO_URI]:latest
+docker push [ECR_REPO_URI]:latest
+```
+
+This ensures the image is compatible with AWS App Runner's runtime environment.
+
+### Other Deployment Considerations
+- Ensure the port is set to 7860 in both Dockerfile and AWS App Runner configuration
+- Health check settings should be:
+  - Protocol: TCP
+  - Port: 7860
+  - Timeout: 15 seconds
+  - Interval: 30 seconds
+  - Healthy threshold: 3
+  - Unhealthy threshold: 5
 
 
 
