@@ -232,13 +232,13 @@ The model achieves strong performance across different food categories:
 Here are some example detections from our model:
 
 #### Pizza Detection
-![Pizza Detection](examples/pizza.jpg)
+![Pizza Detection](inference_results/__AedPjRe7EhLD3Wzx5t2g_detected.png)
 
 #### Burger Detection
-![Burger Detection](examples/burger.jpg)
+![Burger Detection](inference_results/_-dXI3QzA8UUl2pESznHIQ_detected.png)
 
-#### Sushi Detection
-![Sushi Detection](examples/sushi.jpg)
+#### Salad Detection
+![Sushi Detection](inference_results/__AedPjRe7EhLD3Wzx5t2g_detected.png)
 
 The model shows robust performance across different:
 - Lighting conditions
@@ -249,7 +249,5 @@ The model shows robust performance across different:
 
 Evaluation metrics are available in the training logs and through the web interface.
 
-## License
-[Specify your license here]
 
 
