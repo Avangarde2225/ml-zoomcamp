@@ -12,17 +12,16 @@ import os
 warnings.filterwarnings('ignore', category=FutureWarning)
 
 class FoodDetectionApp:
-    def __init__(self, model_path='runs/detect/train9/weights/best.pt'):
+    def __init__(self):
         """Initialize the Food Detection Application"""
         # Disable gradients for inference
         torch.set_grad_enabled(False)
         
         # Load model
-        self.model = YOLO(model_path)
+        self.model = YOLO('runs/detect/train9/weights/best.pt')
         self.model.to('cpu')  # Ensure model is on CPU
         
-        self.names = ['pizza', 'burger', 'sandwich', 'salad', 'sushi', 
-                     'pasta', 'steak', 'soup', 'taco', 'curry']
+        self.class_names = ['pizza', 'burger', 'sandwich', 'salad', 'pasta', 'sushi', 'steak', 'soup', 'taco', 'curry']
         
         # Model metrics - can be updated from evaluation results
         self.metrics = {
@@ -61,125 +60,81 @@ class FoodDetectionApp:
     @property
     def model_description(self):
         """Generate the model description markdown"""
-        return f"""
-        ## Model Performance
-        - mAP50: {self.metrics['mAP50']:.3f}
-        - mAP50-95: {self.metrics['mAP50-95']:.3f}
-        - Precision: {self.metrics['precision']:.3f}
-        - Recall: {self.metrics['recall']:.3f}
-
-        ## Supported Food Types
-        This model can detect:
-        - Pizza 🍕
-        - Burger 🍔
-        - Sandwich 🥪
-        - Salad 🥗
-        - Sushi 🍱
-        - Pasta 🍝
-        - Steak 🥩
-        - Soup 🥣
-        - Taco 🌮
-        - Curry 🍛
-
-        ## Image Requirements
-        - Format: JPG, PNG
-        - Size: Any (will be automatically resized)
-        - Content: Clear food photos
-        """
+        return f"""## Food Detection Model Performance
+- mAP50: {self.metrics['mAP50']:.3f}
+- mAP50-95: {self.metrics['mAP50-95']:.3f}
+- Precision: {self.metrics['precision']:.3f}
+- Recall: {self.metrics['recall']:.3f}
+"""
 
     def process_image(self, image):
         """Convert and prepare image for inference"""
-        try:
-            if image is None:
-                raise ValueError("No image provided")
-                
-            if isinstance(image, str):
-                image = Image.open(image)
-                
-            if image.mode != 'RGB':
-                image = image.convert('RGB')
-                
-            return image
-            
-        except Exception as e:
-            print(f"Error processing image: {str(e)}")
+        if image is None:
             return None
+        if isinstance(image, str):
+            # If image is a file path
+            if not os.path.exists(image):
+                return None
+            image = gr.processing_utils.decode_base64_to_image(image)
+        return np.array(image)
 
     def detect_food(self, image):
         """Main detection function"""
         try:
-            if image is None:
-                return None, "No image provided"
-
-            # Preprocess image
             processed_image = self.process_image(image)
             if processed_image is None:
-                return None, "Error processing image"
+                return None, "Error: Could not process image"
             
-            # Run inference with lower confidence threshold
-            results = self.model.predict(processed_image, conf=0.25, verbose=False)
-            result = results[0]
+            results = self.model.predict(processed_image, conf=0.25, verbose=False)[0]
+            detections = []
             
-            # Print debug information
-            print(f"Number of detections: {len(result.boxes)}")
-            print(f"Confidence scores: {result.boxes.conf if len(result.boxes) > 0 else 'No detections'}")
+            for box, conf, cls in zip(results.boxes.xyxy, results.boxes.conf, results.boxes.cls):
+                class_name = self.class_names[int(cls)]
+                confidence = float(conf)
+                detections.append(f"{class_name}: {confidence:.2%}")
             
-            # Generate visualization
-            result_plot = result.plot()
-            result_plot = cv2.cvtColor(result_plot, cv2.COLOR_BGR2RGB)
+            if not detections:
+                return results.plot(), "No food items detected"
             
-            # Generate detection descriptions
-            descriptions = []
-            if len(result.boxes) > 0:  # Check if there are any detections
-                for box, conf, cls in zip(result.boxes.xyxy, result.boxes.conf, result.boxes.cls):
-                    food_type = self.names[int(cls)]
-                    confidence = float(conf)
-                    descriptions.append(f"{food_type}: {confidence:.2%} confidence")
-                    print(f"Detected {food_type} with confidence {confidence:.2%}")
-            
-            description_text = "\n".join(descriptions) if descriptions else "No food items detected"
-            
-            return result_plot, description_text
+            return results.plot(), "\n".join(detections)
             
         except Exception as e:
-            print(f"Error during detection: {str(e)}")
+            print(f"Error in detection: {str(e)}")
             return None, f"Error during detection: {str(e)}"
 
     def create_interface(self):
         """Create and configure the Gradio interface"""
-        try:
-            interface = gr.Interface(
-                fn=self.detect_food,
-                inputs=gr.Image(type="pil", label="Upload Food Image"),
-                outputs=[
-                    gr.Image(type="numpy", label="Detected Food Items"),
-                    gr.Textbox(label="Detections")
-                ],
-                title="Food Detection AI",
-                description=self.model_description,
-                examples=[
-                    [str(self.examples_dir / "pizza.jpg")],
-                    [str(self.examples_dir / "burger.jpg")],
-                    [str(self.examples_dir / "sushi.jpg")]
-                ]
-            )
-            return interface
-        except Exception as e:
-            print(f"Error creating interface: {str(e)}")
-            raise
+        interface = gr.Interface(
+            fn=self.detect_food,
+            inputs=gr.Image(type="pil", label="Upload an image"),
+            outputs=[
+                gr.Image(type="numpy", label="Detected Food Items"),
+                gr.Textbox(label="Detections")
+            ],
+            title="Food Detection System",
+            description=self.model_description,
+            examples=[
+                [str(self.examples_dir / "pizza.jpg")],
+                [str(self.examples_dir / "burger.jpg")],
+                [str(self.examples_dir / "sushi.jpg")]
+            ],
+            allow_flagging="never"
+        )
+        return interface
 
-    def run(self, server_name="0.0.0.0", server_port=7860):
+    def run(self):
         """Run the Gradio app"""
-        try:
-            interface = self.create_interface()
-            interface.launch(
-                server_name=server_name,
-                server_port=server_port,
-                share=False
-            )
-        except Exception as e:
-            print(f"Error launching app: {str(e)}")
-            raise
+        interface = self.create_interface()
+        # Configure for AWS App Runner
+        port = int(os.environ.get("PORT", 7860))
+        interface.launch(
+            server_name="0.0.0.0",  # Required for AWS
+            server_port=port,        # Use PORT from environment
+            share=False,
+            show_error=True,         # Show detailed error messages
+            enable_queue=True,       # Enable request queuing
+            max_threads=40           # Increase thread limit
+        )
 
 def main():
     try:

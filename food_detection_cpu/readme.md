@@ -10,7 +10,7 @@
 7. [Deployment](#deployment)
 8. [Results & Evaluation](#results--evaluation)  
 9. [Project Structure](#project-structure)  
-10. [License](#license)  
+
 
 ---
 
@@ -225,20 +225,32 @@ The model achieves strong performance across different food categories:
 - Best performing: Sushi (mAP50: 85.8%)
 - Most challenging: Pasta (mAP50: 33.2%)
 
-### Performance Visualization
-![Model Performance Metrics](performance_metrics.png)
+### Model Performance
+The YOLOv8n model was trained on our custom food dataset and achieved the following metrics:
+
+![Model Performance Metrics](docs/images/performance_metrics.png)
+
+- mAP50: 0.630 (63.0%)
+- mAP50-95: 0.562 (56.2%)
+- Precision: 0.636 (63.6%)
+- Recall: 0.566 (56.6%)
 
 ### Example Detections
 Here are some example detections from our model:
 
 #### Pizza Detection
-![Pizza Detection](inference_results/__AedPjRe7EhLD3Wzx5t2g_detected.png)
+![Pizza Detection](docs/images/pizza_detected.png)
 
 #### Burger Detection
-![Burger Detection](inference_results/_-dXI3QzA8UUl2pESznHIQ_detected.png)
+![Burger Detection](docs/images/burger_detected.png)
 
-#### Salad Detection
-![Sushi Detection](inference_results/__AedPjRe7EhLD3Wzx5t2g_detected.png)
+#### Sushi Detection
+![Sushi Detection](docs/images/sushi_detected.png)
+
+> **Note**: These example images are from actual model detections. To see them:
+> 1. Run the model on your own images using the instructions in [Inference on CPU](#inference-on-cpu)
+> 2. Or visit our [live demo](https://4wtec9nstj.us-east-1.awsapprunner.com)
+> 3. Example images can be found in the `docs/images` directory after cloning the repository
 
 The model shows robust performance across different:
 - Lighting conditions
@@ -248,6 +260,60 @@ The model shows robust performance across different:
 - Multiple food items in single image
 
 Evaluation metrics are available in the training logs and through the web interface.
+
+## Deployment Challenges and Costs
+
+### Deployment Options Trade-offs
+
+1. **AWS App Runner**
+   - ✅ Ideal for Gradio UI applications
+   - ✅ Simplest deployment process
+   - ✅ Built-in HTTPS and auto-scaling
+   - ✅ No infrastructure management
+   - ❌ Higher cost compared to alternatives
+   - ❌ Not free tier eligible
+
+2. **AWS Elastic Beanstalk**
+   - ✅ Free tier eligible (750 hours/month of t2.micro)
+   - ✅ Good for consistent traffic
+   - ✅ Can host Gradio UI
+   - ❌ More complex setup and maintenance
+   - ❌ Manual HTTPS configuration
+   - ❌ Requires more AWS knowledge
+
+3. **AWS Lambda + API Gateway**
+   - ✅ Most cost-effective for sporadic usage
+   - ✅ Free tier includes 1M requests/month
+   - ❌ Not suitable for Gradio UI
+   - ❌ 15-minute timeout limitation
+   - ❌ Memory constraints for ML models
+   - ❌ Requires application restructuring
+
+### AWS App Runner Cost Estimation
+With minimal configuration (as of January 2024):
+- Compute: $0.064/hour for 1 vCPU/2GB RAM
+- Scale to zero when inactive
+- Estimated monthly costs:
+  - 8 hours/day usage: ~$15.36/month
+  - 24/7 usage: ~$46.08/month
+  - Additional costs for auto-scaling instances
+  - Data transfer: First 1GB free, then $0.09/GB
+
+### Cost Optimization Strategies
+1. **Minimal Resource Configuration**
+   - 1 vCPU, 2GB RAM configuration
+   - Single instance maximum
+
+2. **Aggressive Auto-scaling**
+   - Minimum instances: 0
+   - Maximum instances: 1
+   - Quick scale-down (5 minutes)
+   - Concurrent requests: 50
+
+3. **Usage Optimization**
+   - Deploy during demo/testing only
+   - Pause service when not in use
+   - Monitor and adjust resources based on actual usage
 
 
 
