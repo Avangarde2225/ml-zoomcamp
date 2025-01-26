@@ -1,0 +1,17 @@
+path: /Users/serdarc/Desktop/ml-zoomcamp/food_detection_cpu/data  # dataset root dir
+train: train/images  # train images (relative to 'path')
+val: val/images  # val images (relative to 'path')
+test: test/images  # test images (optional)
+
+# Classes
+names:
+  0: pizza
+  1: burger
+  2: sandwich
+  3: salad
+  4: sushi
+  5: pasta
+  6: steak
+  7: soup
+  8: taco
+  9: curry 

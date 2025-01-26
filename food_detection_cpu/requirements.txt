@@ -1,0 +1,17 @@
+ultralytics==8.0.227
+gradio==3.50.2
+Pillow==10.2.0
+numpy==1.26.4
+opencv-python-headless==4.9.0.80
+torch==2.1.2
+torchvision==0.16.2
+pydantic==2.5.3
+fastapi==0.104.1
+starlette==0.27.0
+typing-extensions>=4.8.0
+python-multipart>=0.0.7
+protobuf>=3.20.3,<5.0.0dev
+urllib3>=1.26.18,<2.0.0
+botocore>=1.35.0,<1.36.0
+boto3>=1.35.0,<1.36.0
+s3transfer>=0.10.0,<0.11.0
