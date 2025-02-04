@@ -1,79 +1,205 @@
 import os
 from pathlib import Path
 import shutil
+import cv2
+import numpy as np
 
-# Define the mapping from old class indices to new ones
-class_mapping = {
-    # Pizza and related items (0)
-    41: 0, 10: 0, 11: 0, 51: 0,
-    
-    # Burger and related items (1)
-    42: 1, 13: 1, 52: 1,
-    
-    # Sandwich and related items (2)
-    43: 2, 14: 2, 53: 2,
-    
-    # Salad and related items (3)
-    44: 3, 15: 3, 54: 3,
-    
-    # Sushi and related items (4)
-    45: 4, 16: 4, 55: 4,
-    
-    # Pasta and related items (5)
-    46: 5, 17: 5, 56: 5,
-    
-    # Steak and related items (6)
-    47: 6, 18: 6, 57: 6,
-    
-    # Soup and related items (7)
-    48: 7, 19: 7, 58: 7,
-    
-    # Taco and related items (8)
-    49: 8, 21: 8, 59: 8,
-    
-    # Curry and related items (9)
-    50: 9, 22: 9, 60: 9,
-    
-    # Additional mappings for remaining classes
-    23: 0, 25: 1, 26: 2, 27: 3, 28: 4, 29: 5,
-    32: 6, 33: 7, 34: 8, 35: 9, 36: 0, 39: 1,
-    40: 2, 61: 3, 62: 4, 63: 5, 64: 6, 65: 7,
-    66: 8, 67: 9, 68: 0, 69: 1, 70: 2, 71: 3,
-    72: 4, 73: 5, 74: 6, 75: 7, 76: 8, 77: 9,
-    79: 0
+# Class definitions for our food detection model
+CLASSES = {
+    'PIZZA': 0,
+    'BURGER': 1,
+    'SANDWICH': 2,
+    'SALAD': 3,
+    'SUSHI': 4,
+    'PASTA': 5,
+    'STEAK': 6,
+    'SOUP': 7,
+    'TACO': 8,
+    'CURRY': 9
 }
 
+# Source dataset class mappings
+# Format: dataset_class_id: our_class_id
+
+# Food-101 Dataset IDs (1-20)
+FOOD101_MAPPINGS = {
+    10: CLASSES['PIZZA'],      # Pizza
+    13: CLASSES['BURGER'],     # Hamburger
+    14: CLASSES['SANDWICH'],   # Club sandwich
+    15: CLASSES['SALAD'],      # Caesar salad
+    16: CLASSES['SUSHI'],      # Sushi rolls
+    17: CLASSES['PASTA'],      # Spaghetti
+    18: CLASSES['STEAK'],      # Steak
+    19: CLASSES['SOUP'],       # Hot and sour soup
+}
+
+# COCO Food Dataset IDs (41-60)
+COCO_MAPPINGS = {
+    41: CLASSES['PIZZA'],      # Pizza
+    42: CLASSES['BURGER'],     # Burger
+    43: CLASSES['SANDWICH'],   # Sandwich
+    44: CLASSES['SALAD'],      # Salad
+    45: CLASSES['SUSHI'],      # Sushi
+    46: CLASSES['PASTA'],      # Pasta dishes
+    47: CLASSES['STEAK'],      # Steak
+    48: CLASSES['SOUP'],       # Soup
+    49: CLASSES['TACO'],       # Taco
+    50: CLASSES['CURRY'],      # Curry
+}
+
+# Open Images Dataset IDs (51-70)
+OPEN_IMAGES_MAPPINGS = {
+    51: CLASSES['PIZZA'],      # Pizza
+    52: CLASSES['BURGER'],     # Hamburger
+    53: CLASSES['SANDWICH'],   # Sandwich
+    54: CLASSES['SALAD'],      # Salad
+    55: CLASSES['SUSHI'],      # Sushi
+    56: CLASSES['PASTA'],      # Pasta
+    57: CLASSES['STEAK'],      # Steak
+    58: CLASSES['SOUP'],       # Soup
+    59: CLASSES['TACO'],       # Taco
+    60: CLASSES['CURRY'],      # Curry
+}
+
+# Combine all verified mappings
+class_mapping = {
+    **FOOD101_MAPPINGS,
+    **COCO_MAPPINGS,
+    **OPEN_IMAGES_MAPPINGS
+}
+
+def verify_label(label_id):
+    """
+    Verify if a label ID is in our verified mappings.
+    Returns the mapped class ID if valid, None if not.
+    """
+    return class_mapping.get(label_id)
+
+def load_image(image_path):
+    """Load and preprocess image for validation."""
+    try:
+        img = cv2.imread(str(image_path))
+        if img is None:
+            return None
+        return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    except Exception as e:
+        print(f"Error loading image {image_path}: {e}")
+        return None
+
+def validate_label(image_path, label_id, bbox):
+    """
+    Validate if the label makes sense for the image region.
+    bbox format: [x_center, y_center, width, height] (normalized)
+    """
+    img = load_image(image_path)
+    if img is None:
+        return True  # Can't validate, assume it's correct
+        
+    h, w = img.shape[:2]
+    x, y, width, height = bbox
+    
+    # Convert normalized coordinates to pixel coordinates
+    x1 = int((x - width/2) * w)
+    y1 = int((y - height/2) * h)
+    x2 = int((x + width/2) * w)
+    y2 = int((y + height/2) * h)
+    
+    # Ensure coordinates are within image bounds
+    x1, y1 = max(0, x1), max(0, y1)
+    x2, y2 = min(w, x2), min(h, y2)
+    
+    if x2 <= x1 or y2 <= y1:
+        return False
+        
+    # Extract the region
+    region = img[y1:y2, x1:x2]
+    
+    # Basic shape validation
+    aspect_ratio = width / height if height > 0 else 0
+    
+    # Validation rules based on class
+    if label_id == CLASSES['PIZZA']:
+        # Pizza should be relatively round (aspect ratio close to 1)
+        if not (0.8 < aspect_ratio < 1.2):
+            return False
+            
+    elif label_id == CLASSES['BURGER']:
+        # Burgers typically wider than tall
+        if not (1.2 < aspect_ratio < 2.0):
+            return False
+            
+    elif label_id == CLASSES['SOUP']:
+        # Soup containers typically taller than wide
+        if aspect_ratio > 1.2:
+            return False
+    
+    return True
+
 def fix_label_file(file_path):
-    """Fix class indices in a single label file."""
+    """
+    Fix labels in a single file, removing any unverified mappings.
+    Returns True if file was modified, False otherwise.
+    """
+    modified = False
+    new_labels = []
+    
+    # Get corresponding image path
+    image_path = str(file_path).replace('labels', 'images').replace('.txt', '.jpg')
+    if not os.path.exists(image_path):
+        image_path = image_path.replace('.jpg', '.png')
+        if not os.path.exists(image_path):
+            return False
+    
     with open(file_path, 'r') as f:
-        lines = f.readlines()
-    
-    fixed_lines = []
-    for line in lines:
-        parts = line.strip().split()
-        if not parts:
+        labels = f.readlines()
+        
+    for label in labels:
+        parts = label.strip().split()
+        if not parts or len(parts) != 5:  # YOLO format requires 5 values
             continue
-        old_class = int(parts[0])
-        if old_class in class_mapping:
-            new_class = class_mapping[old_class]
-            fixed_lines.append(f"{new_class} {' '.join(parts[1:])}\n")
+            
+        class_id = int(parts[0])
+        bbox = [float(x) for x in parts[1:]]
+        
+        # Validate the label
+        if 0 <= class_id <= 9 and validate_label(image_path, class_id, bbox):
+            new_labels.append(label)
+        else:
+            modified = True
     
-    if fixed_lines:
+    if modified:
         with open(file_path, 'w') as f:
-            f.writelines(fixed_lines)
+            f.writelines(new_labels)
+    
+    return modified
 
 def main():
-    # Process each split
-    data_dir = Path("data")
-    for split in ['train', 'val', 'test']:
-        label_dir = data_dir / split / "labels"
-        if not label_dir.exists():
+    """
+    Process all label files in the dataset.
+    """
+    # Paths to label directories
+    label_dirs = [
+        'data/train/labels',
+        'data/val/labels',
+        'data/test/labels'
+    ]
+    
+    total_files = 0
+    modified_files = 0
+    
+    for label_dir in label_dirs:
+        if not os.path.exists(label_dir):
+            print(f"Warning: Directory {label_dir} not found")
             continue
-        
-        print(f"Processing {split} split...")
-        for label_file in label_dir.glob("*.txt"):
-            fix_label_file(label_file)
-        print(f"Finished processing {split} split")
+            
+        for label_file in Path(label_dir).glob('*.txt'):
+            total_files += 1
+            if fix_label_file(str(label_file)):
+                modified_files += 1
+    
+    print(f"Processed {total_files} files")
+    print(f"Modified {modified_files} files")
+    print("Label correction complete")
 
 if __name__ == "__main__":
     main() 

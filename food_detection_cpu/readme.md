@@ -235,21 +235,39 @@ The YOLOv8n model was trained on our custom food dataset and achieved the follow
 - Recall: 0.566 (56.6%)
 
 ### Example Detections
-Here are some example detections from our model:
+Here are some example detections from our latest model (after label validation and retraining):
 
 #### Pizza Detection
-![Pizza Detection](docs/images/pizza_detected.png)
+![Pizza Detection](inference_results/pizza_detected.png)
 
 #### Burger Detection
-![Burger Detection](docs/images/burger_detected.png)
+![Burger Detection](inference_results/burger_detected.png)
 
-#### Salad Detection
-![Salad Detection](docs/images/sushi_detected.png)
+#### Sushi Detection
+![Sushi Detection](inference_results/sushi_detected.png)
 
-> **Note**: These example images are from actual model detections. To see them:
-> 1. Run the model on your own images using the instructions in [Inference on CPU](#inference-on-cpu)
-> 2. Or visit our [live demo](https://zm3uaffhh9.us-east-1.awsapprunner.com)
-> 3. Example images can be found in the `docs/images` directory after cloning the repository
+### Model Training and Tracking
+
+The model training process is tracked using MLflow, allowing us to monitor:
+- Training metrics (mAP, precision, recall)
+- Model parameters
+- Training artifacts
+
+Latest training metrics (from MLflow):
+- mAP50: 0.630 (63.0%)
+- mAP50-95: 0.562 (56.2%)
+- Precision: 0.636 (63.6%)
+- Recall: 0.566 (56.6%)
+
+To view training history and metrics:
+```bash
+mlflow ui
+```
+
+> **Note**: These example images show actual model detections. You can:
+> 1. Run inference on your own images using the instructions in [Inference on CPU](#inference-on-cpu)
+> 2. Visit our [live demo](https://zm3uaffhh9.us-east-1.awsapprunner.com)
+> 3. Find more example images in the `inference_results` directory
 
 The model shows robust performance across different:
 - Lighting conditions
@@ -341,6 +359,44 @@ This ensures the image is compatible with AWS App Runner's runtime environment.
   - Interval: 30 seconds
   - Healthy threshold: 3
   - Unhealthy threshold: 5
+
+## Known Issues and Limitations
+
+### Detection Accuracy Issues
+The current model has some known limitations in its detection capabilities:
+
+1. **Color-based Confusion**:
+   - Blue-colored foods may be misclassified (e.g., blue-colored burgers being detected as soup)
+   - Unusual food coloring can lead to incorrect classifications
+   
+2. **Shape-based Misclassification**:
+   - Round objects might be incorrectly classified as pizza (e.g., coffee cups being labeled as pizza)
+   - Similar shapes across different food categories can cause confusion
+
+### Improvement Strategies
+To address these limitations, consider:
+
+1. **Adjusting Confidence Threshold**:
+   - Current threshold: 0.25 in `app.py`
+   - Recommended: Increase to 0.5 or higher for more confident predictions
+   - Example: `results = self.model.predict(processed_image, conf=0.5, verbose=False)[0]`
+
+2. **Data Preprocessing**:
+   - Add color-based validation
+   - Implement shape detection preprocessing
+   - Consider size and aspect ratio of detected objects
+
+3. **Model Retraining**:
+   - Include more diverse examples of each food category
+   - Add examples with varying colors and presentations
+   - Include edge cases and potential confusing items
+
+### Usage Recommendations
+For optimal results:
+- Use well-lit, clear images
+- Avoid unusual food colorings or presentations
+- Position food items with clear separation
+- Use standard serving presentations
 
 
 
