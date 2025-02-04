@@ -12,7 +12,6 @@ venv/
 # Model weights and data
 *.pt
 data/raw/
-inference_results/
 flagged/
 !docs/images/    # Allow README images
 

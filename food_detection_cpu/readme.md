@@ -239,13 +239,13 @@ The YOLOv8n model was trained on our custom food dataset and achieved the follow
 Here are some example detections from our latest model (after label validation and retraining):
 
 #### Pizza Detection
-![Pizza Detection](food_detection_cpu/inference_results/burger_detected.png)
+![Pizza Detection](inference_results/burger_detected.png)
 
 #### Burger Detection
-![Burger Detection](food_detection_cpu/inference_results/burger_detected.png)
+![Burger Detection](inference_results/burger_detected.png)
 
 #### Sushi Detection
-![Sushi Detection](food_detection_cpu/inference_results/sushi_detected.png)
+![Sushi Detection](inference_results/sushi_detected.png)
 
 ### Model Training and Tracking
 
