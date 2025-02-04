@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/serdarc/Desktop/ml-zoomcamp/food_detection_cpu/mlruns/368442673445372765/452d2cc163834620a90184540f1ce5b4/artifacts
+end_time: 1738682322226
+entry_point_name: ''
+experiment_id: '368442673445372765'
+lifecycle_stage: active
+run_id: 452d2cc163834620a90184540f1ce5b4
+run_name: yolov8n_training
+run_uuid: 452d2cc163834620a90184540f1ce5b4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1738682322220
+status: 3
+tags: []
+user_id: serdarc

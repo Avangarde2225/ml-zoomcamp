@@ -1,0 +1,6 @@
+artifact_location: file:///Users/serdarc/Desktop/ml-zoomcamp/food_detection_cpu/mlruns/368442673445372765
+creation_time: 1738682321897
+experiment_id: '368442673445372765'
+last_update_time: 1738682321897
+lifecycle_stage: active
+name: food_detection_yolov8
