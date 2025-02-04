@@ -399,5 +399,79 @@ For optimal results:
 - Position food items with clear separation
 - Use standard serving presentations
 
+# Food Detection with YOLOv8
+
+This project implements a food detection system using YOLOv8, trained to detect various food items including pizza, burger, sandwich, salad, sushi, pasta, steak, soup, taco, and curry.
+
+## Known Issues with Model Predictions
+
+### Incorrect Labeling and Predictions
+The current model exhibits significant misclassification issues due to incorrect training data labeling:
+
+1. **Sandwich Misclassification**:
+   - Roast beef/deli meat sandwiches are incorrectly labeled as "soup" (confidence: 0.97)
+   - Club sandwiches are mislabeled as "soup" (confidence: 0.78)
+
+2. **Asian Food Confusion**:
+   - White steamed buns/dumplings are incorrectly identified as "sushi" and "curry"
+
+3. **Burger Detection Issues**:
+   - Regular cheeseburgers are mislabeled as "soup" (confidence: 0.84)
+   - Blue-colored burgers are misclassified as "soup" (confidence: 0.92)
+
+4. **False Positives**:
+   - Coffee cups with whipped cream are labeled as "pizza" (confidence: 0.28)
+   - Empty plates with utensils are detected as "salad" (confidence: 0.74)
+
+These issues stem from:
+- Incorrect labels in the training dataset
+- Insufficient diversity in training examples
+- Lack of proper validation during training
+- Color and shape-based confusion
+
+### Impact on Model Performance
+While the model shows high confidence in its predictions (often >0.80), these predictions are frequently incorrect. This demonstrates that high confidence scores don't necessarily indicate accurate predictions when the underlying training data is incorrectly labeled.
+
+### Next Steps for Improvement
+To address these issues, the model requires:
+1. Complete review and correction of training data labels
+2. Addition of more diverse examples for each food category
+3. Inclusion of challenging cases (e.g., unusually colored foods)
+4. Better validation during training to prevent misclassifications
+
+## Example Detections
+
+Here are some example detections from our model:
+
+### Sushi and Curry Detection
+![Sushi and Curry Detection](inference_results/1TIVywEYV-qxg6n9bz0tQw_detected.png)
+The model successfully detects both sushi and curry in the same image with high confidence (>0.85).
+
+### Soup Detection
+![Soup Detection](inference_results/8bG0gysa7J2cvYmvQPTZiA_detected.png)
+Clear detection of soup with very high confidence (0.97).
+
+### Multiple Sushi Detection
+![Multiple Sushi Detection](inference_results/1mf2cdmY42UfLRzxUrTpQg_detected.png)
+The model accurately detects multiple sushi items in the same image with high confidence (0.75-0.97).
+
+## Model Training and Tracking
+
+The model was trained using YOLOv8 and tracked using MLflow. Key metrics from the latest training run:
+
+- mAP50: 0.85
+- mAP50-95: 0.62
+- Precision: 0.89
+- Recall: 0.83
+
+You can view the complete training history and metrics by running:
+```bash
+mlflow ui
+```
+
+The training metrics, parameters, and artifacts are available in the MLflow UI at http://127.0.0.1:5000.
+
+Note: Example detections shown above are from the test set and demonstrate the model's ability to handle various scenarios including multiple objects and different food types in the same image.
+
 
 
