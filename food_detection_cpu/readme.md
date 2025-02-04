@@ -227,7 +227,8 @@ The model achieves strong performance across different food categories:
 ### Model Performance
 The YOLOv8n model was trained on our custom food dataset and achieved the following metrics:
 
-![Model Performance Metrics](docs/images/performance_metrics.png)
+<!-- ![Model Performance Metrics](docs/images/performance_metrics.png) -->
+### Model Performance Metrics
 
 - mAP50: 0.630 (63.0%)
 - mAP50-95: 0.562 (56.2%)
@@ -238,13 +239,13 @@ The YOLOv8n model was trained on our custom food dataset and achieved the follow
 Here are some example detections from our latest model (after label validation and retraining):
 
 #### Pizza Detection
-![Pizza Detection](inference_results/pizza_detected.png)
+![Pizza Detection](food_detection_cpu/inference_results/burger_detected.png)
 
 #### Burger Detection
-![Burger Detection](inference_results/burger_detected.png)
+![Burger Detection](food_detection_cpu/inference_results/burger_detected.png)
 
 #### Sushi Detection
-![Sushi Detection](inference_results/sushi_detected.png)
+![Sushi Detection](food_detection_cpu/inference_results/sushi_detected.png)
 
 ### Model Training and Tracking
 
